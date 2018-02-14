@@ -6,3 +6,4 @@ models
 *.p
 lenet*
 checkpoint
+*.jpg
