@@ -1,4 +1,4 @@
-# **Traffic Sign Recognition** 
+# **Traffic Sign Recognition**
 
 
 **Build a Traffic Sign Recognition Project**
@@ -20,12 +20,14 @@ The goals / steps of this project are the following:
 [image4]: ./examples/preproc3.png "grayscaled"
 [image5]: ./examples/preproc4.png "equalised"
 [image6]: ./examples/preproc5.png "rotated"
-[image7]: ./data/placeholder.png "Traffic Sign 1"
-[image8]: ./data/placeholder.png "Traffic Sign 2"
-[image9]: ./data/placeholder.png "Traffic Sign 3"
-[image10]: ./data/placeholder.png "Traffic Sign 4"
-[image11]: ./data/placeholder.png "Traffic Sign 5"
+[image7]: ./examples/AheadPrio.png "New Images"
+[image8]: ./examples/viz1.png "Right of way"
+[image9]: ./examples/viz2.png "Ahead Priority"
+[image10]: ./examples/viz3.png "30 kph"
+[image11]: ./examples/viz4.png "Traffic Free"
 [image12]: ./examples/reportvizualisation2.png
+[image13]: ./examples/viz5.png "Children Crossing"
+[image14]: ./examples/featuremap.png "feature map"
 
 ---
 ### Data Set Summary & Exploration
@@ -46,8 +48,9 @@ In the first vizualisation, the similarity of the label distribution between dat
 
 ![alt text][image1]
 
-In the second vizualisation, it is clear that the distribution of classes within the training data is not uniform. This leads to the idea of balancing the distribution
-so that individual classes are not modelled to be less probable than others.
+In the second vizualisation, it is clear that the distribution of classes within the training data is not uniform. This leads to the idea of whether to balance the distribution.
+
+Balancing (by augmenting the dataset with more images from the classes with fewer frequencies) should mean that in a model that generalises well the model has not 'baked in' biases around image frequency.
 
 ![alt text][image12]
 
@@ -63,11 +66,10 @@ The final pipeline for pre-processing was:
 + apply and equalising operation to the image
 
 Augmentation was achieved by iterating the dataset and adding rotated images for classes which were less frequent members of the dataset cf. the most frequent member.
-By adding more data and by balancing the class distribution i hoped to make the model more robust.
 
-The normalising and equalising operations were invoked to help the model with feature extraction.
+The normalising was carried out so that the range of pixel values for the images were scaled between a fixed range of values. This is a necessary condition for making the optimisation faster and to avoid certain weights over-dominating or under-dominating the model.
 
-The conversion to grayscale reduced the size of the data to be processed without losing much information.
+The conversion to grayscale reduced the size of the data to be processed.
 
 Each operation can be seen below from base image up to the final pre-processing step. Finally, the rotated image set shows how new images can be created from existing ones.
 
@@ -82,9 +84,9 @@ Each operation can be seen below from base image up to the final pre-processing 
 
 My final model consisted of the following layers:
 
-| Layer         	|     Description	        					| 
-|:---------------------:|:---------------------------------------------:| 
-| Input         		| 32x32x1 RGB image   							| 
+| Layer         	|     Description	        					|
+|:---------------------:|:---------------------------------------------:|
+| Input         		| 32x32x1 RGB image   							|
 | Convolution 5x5     	| 1x1 stride, valid padding, outputs 28x28x6 	|
 | RELU		        |												|
 | Max pooling	      	| 2x2 stride,  outputs 14x14x6 				|
@@ -95,36 +97,39 @@ My final model consisted of the following layers:
 | RELU                  |            |
 | Drop Out              | 0.5        |
 | Fully connected	| 120 to 84         									|
-| Drop Out              | 0.5        |
-| RELU                  |            |
+| RELU                  |         |
+| Drop Out              | 0.5           |
 | Fully connected       | 84 to 43   |
 | Softmax	        | to calculate the probabilities of the predicted class        									|
 |						|												|
 |						|												|
 
-#### 3. Describe how you trained your model. The discussion can include the type of optimizer, the batch size, number of epochs and any hyperparameters such as learning rate.
+#### 3. Describe how you trained your model.
 
-To train the model, I used an ....
+To train the model, I prepared the augmented training and original validation data sets by passing them through the normalisation processes outlined above.
 
-#### 4. Describe the approach taken for finding a solution and getting the validation set accuracy to be at least 0.93. Include in the discussion the results on the training, validation and test sets and where in the code these were calculated. Your approach may have been an iterative process, in which case, outline the steps you took to get to the final solution and why you chose those steps. Perhaps your solution involved an already well known implementation or architecture. In this case, discuss why you think the architecture is suitable for the current problem.
+I then initialised the placeholder variables of the model (input data, weights, biases) and ran through for a number of epochs (default 100) mini-batches of a default size of 128. The model trained using a learning rate set initially to 0.001. Every 5 epochs i fed the validation set into the model to get a view of validation accuracy.
+
+#### 4. Describe the approach taken for finding a solution and getting the validation set accuracy to be at least 0.93.
+
+I started with default hyper-parameters and no drop out (i.e. the LeNet model from the classroom). Using 100 epochs and a batch of 128 realised a validation score of 0.87.
+
+Having set up the training pipeline (load data, augment, scale) i then tuned the model by adding drop out layers on each fully connected layer and then passing in combinations of parameters changing epochs, batch size, learning rate and drop out rate.
+
+The best model found scored 0.961 on validation using 100 epochs ad batch size of 512, learning rate of 0.0001 and drop out of 0.5. In truth, the 2 key actions to improve on the base model were to augment the data set and to introduce drop out.
 
 My final model results were:
-* training set accuracy of ?
-* validation set accuracy of 0.949 
-* test set accuracy of 0.926
+* training set accuracy of 0.990
+* validation set accuracy of 0.961
+* test set accuracy of 0.928
 
-If an iterative approach was chosen:
-* What was the first architecture that was tried and why was it chosen?
-* What were some problems with the initial architecture?
-* How was the architecture adjusted and why was it adjusted? Typical adjustments could include choosing a different model architecture, adding or taking away layers (pooling, dropout, convolution, etc), using an activation function or changing the activation function. One common justification for adjusting an architecture would be due to overfitting or underfitting. A high accuracy on the training set but low accuracy on the validation set indicates over fitting; a low accuracy on both sets indicates under fitting.
-* Which parameters were tuned? How were they adjusted and why?
-* What are some of the important design choices and why were they chosen? For example, why might a convolution layer work well with this problem? How might a dropout layer help with creating a successful model?
+The LeNet architecture was chosen as it was:
++ already programmed...
++ a well known image classifier
 
-If a well known architecture was chosen:
-* What architecture was chosen?
-* Why did you believe it would be relevant to the traffic sign application?
-* How does the final model's accuracy on the training, validation and test set provide evidence that the model is working well?
- 
+Other architectures i researched but did not implement were GoogLeNet and ResNet. I didn't implement them due to having achieved the validation accuracy of the project.
+
+I also think more data would have helped the model generalise better as the higher trainig=ng accuracy compared to the testing accuracy suggested the model was over-fitting.
 
 ### Test a Model on New Images
 
@@ -132,44 +137,106 @@ If a well known architecture was chosen:
 
 Here are five German traffic signs that I found on the web:
 
-![alt text][image4] ![alt text][image5] ![alt text][image6] 
-![alt text][image7] ![alt text][image8]
+![alt text][image7]
 
-The first image might be difficult to classify because ...
+Only the 4th image looked to be very difficult to classify due to the foliage obscuring the sign. Each of the others, to the human eye, looked to be good copies of existing classes in the data set. In particular:
 
-#### 2. Discuss the model's predictions on these new traffic signs and compare the results to predicting on the test set. At a minimum, discuss what the predictions were, the accuracy on these new predictions, and compare the accuracy to the accuracy on the test set (OPTIONAL: Discuss the results in more detail as described in the "Stand Out Suggestions" part of the rubric).
+The 1st 2 images have very simple structures and are distinct images in the set.
+
+However, the 3rd and 4th inage should be harder to classify as:
+
+The 3rd image would be harder to classify as it shares many facets with other images (the red circle with numbers inside)
+
+The 5th image shares many facets with other images as well (red triangle with shapes inside)
+
+#### 2. Discuss the model's predictions on these new traffic signs and compare the results to predicting on the test set.
 
 Here are the results of the prediction:
 
-| Image			        |     Prediction	        					| 
-|:---------------------:|:---------------------------------------------:| 
-| Stop Sign      		| Stop sign   									| 
-| U-turn     			| U-turn 										|
-| Yield					| Yield											|
-| 100 km/h	      		| Bumpy Road					 				|
-| Slippery Road			| Slippery Road      							|
+| Image			        |     Prediction	        					|
+|:---------------------:|:---------------------------------------------:|
+| Right of Way      		| Right of Way		|
+| Ahead Priority     			| Ahead Priority						|
+| 30 kph					| Keep right								|
+| Traffic Free	      		| Roundabout mandatory   	 				|
+| Children Crossing			| Wild animals crossing						|
 
 
-The model was able to correctly guess 4 of the 5 traffic signs, which gives an accuracy of 80%. This compares favorably to the accuracy on the test set of ...
+The model was able to correctly guess 2 of the 5 traffic signs, which gives an accuracy of 40%. This is a lot less than the accuracy on the test set. Reasons may well be connected to the image rescaling process which may have over distorted the images and possibly the information contained in the background.  (I think prediction five is not far from the truth)
 
-#### 3. Describe how certain the model is when predicting on each of the five new images by looking at the softmax probabilities for each prediction. Provide the top 5 softmax probabilities for each image along with the sign type of each probability. (OPTIONAL: as described in the "Stand Out Suggestions" part of the rubric, visualizations can also be provided such as bar charts)
+#### 3. Describe how certain the model is when predicting on each of the five new images by looking at the softmax probabilities for each prediction
 
-The code for making predictions on my final model is located in the 11th cell of the Ipython notebook.
+The model is VERY certain of its predictions except for the 30 kph sign.
 
-For the first image, the model is relatively sure that this is a stop sign (probability of 0.6), and the image does contain a stop sign. The top five soft max probabilities were
+The predictions were:
 
-| Probability         	|     Prediction	        					| 
-|:---------------------:|:---------------------------------------------:| 
-| .60         			| Stop sign   									| 
-| .20     				| U-turn 										|
-| .05					| Yield											|
-| .04	      			| Bumpy Road					 				|
-| .01				    | Slippery Road      							|
+Image 1: Right of way
+
+![alt text][image8]
+
+| Probability         	|     Prediction	        					|
+|:---------------------:|:---------------------------------------------:|
+| 1.0         			| Right of way 									|
+| 1.0     				| Priority 										|
+| 0.72					| Keep Right									|
+| 0.95	      			| Roundabout mandatory  		 				|
+| 0.99				    | wild animals crossing							|
 
 
-For the second image ... 
+Image 2: Priority Ahead
 
-### (Optional) Visualizing the Neural Network (See Step 4 of the Ipython notebook for more details)
+![alt text][image9]
+
+| Probability           |     Prediction                                |
+|:---------------------:|:---------------------------------------------:|
+| 1.0                   | Right of way                                  |
+| 1.0                   | Priority                                      |
+| 0.72                  | Keep Right                                    |
+| 0.95                  | Roundabout mandatory                          |
+| 0.99                  | wild animals crossing                         |
+
+
+Image 3: 30 kph
+
+![alt text][image10]
+
+| Probability           |     Prediction                                |
+|:---------------------:|:---------------------------------------------:|
+| 1.0                   | Right of way                                  |
+| 1.0                   | Priority                                      |
+| 0.72                  | Keep Right                                    |
+| 0.95                  | Roundabout mandatory                          |
+| 0.99                  | wild animals crossing                         |
+
+Image 4: Traffic Free
+
+![alt text][image11]
+
+| Probability           |     Prediction                                |
+|:---------------------:|:---------------------------------------------:|
+| 1.0                   | Right of way                                  |
+| 1.0                   | Priority                                      |
+| 0.72                  | Keep Right                                    |
+| 0.95                  | Roundabout mandatory                          |
+| 0.99                  | wild animals crossing                         |
+
+Image 5: Children Crossing
+
+![alt text][image13]
+
+| Probability           |     Prediction                                |
+|:---------------------:|:---------------------------------------------:|
+| 1.0                   | Right of way                                  |
+| 1.0                   | Priority                                      |
+| 0.72                  | Keep Right                                    |
+| 0.95                  | Roundabout mandatory                          |
+| 0.99                  | wild animals crossing                         |
+
+
+### Visualizing the Neural Network
+
 #### 1. Discuss the visual output of your trained network's feature maps. What characteristics did the neural network use to make classifications?
 
+![alt text][image14]
 
+The first convolutional network output looks to be picking up basic structure of the image with some features being the raw outline of the sign and others being what is contained within the sign.
