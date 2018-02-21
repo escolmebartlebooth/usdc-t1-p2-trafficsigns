@@ -168,7 +168,7 @@ The model was able to correctly guess 2 of the 5 traffic signs, which gives an a
 
 The model is VERY certain of its predictions except for the 30 kph sign.
 
-The predictions were:
+The predictions are set out below. I have not shown anything less than 0.1%
 
 Image 1: Right of way
 
@@ -176,12 +176,11 @@ Image 1: Right of way
 
 | Probability         	|     Prediction	        					|
 |:---------------------:|:---------------------------------------------:|
-| 1.0         			| Right of way 									|
-| 1.0     				| Priority 										|
-| 0.72					| Keep Right									|
-| 0.95	      			| Roundabout mandatory  		 				|
-| 0.99				    | wild animals crossing							|
-
+| 0.963        			| Right of way 									|
+| 0.032   				| Beware of Ice and Snow    					|
+| 0.004					| Double Curve									|
+| 0.0002      			| Priority Road         		 				|
+| 0.0001			    | Pedestrians       							|
 
 Image 2: Priority Ahead
 
@@ -189,12 +188,11 @@ Image 2: Priority Ahead
 
 | Probability           |     Prediction                                |
 |:---------------------:|:---------------------------------------------:|
-| 1.0                   | Right of way                                  |
-| 1.0                   | Priority                                      |
-| 0.72                  | Keep Right                                    |
-| 0.95                  | Roundabout mandatory                          |
-| 0.99                  | wild animals crossing                         |
-
+| 0.999                 | Priority Road                                 |
+| 0...                  | Roundabout Mandatory                          |
+| 0...                  | end of no passing                             |
+| 0...                  | Roundabout mandatory                          |
+| 0...                  | Speed Limit 80 kph                            |
 
 Image 3: 30 kph
 
@@ -202,11 +200,11 @@ Image 3: 30 kph
 
 | Probability           |     Prediction                                |
 |:---------------------:|:---------------------------------------------:|
-| 1.0                   | Right of way                                  |
-| 1.0                   | Priority                                      |
-| 0.72                  | Keep Right                                    |
-| 0.95                  | Roundabout mandatory                          |
-| 0.99                  | wild animals crossing                         |
+| 0.719                 | Keep Right                                  |
+| 0.130                 | Road Work                                      |
+| 0.091                 | No Passing                                    |
+| 0.024                 | Ahead Only                          |
+| 0.015                 | Priority Road                         |
 
 Image 4: Traffic Free
 
@@ -214,11 +212,11 @@ Image 4: Traffic Free
 
 | Probability           |     Prediction                                |
 |:---------------------:|:---------------------------------------------:|
-| 1.0                   | Right of way                                  |
-| 1.0                   | Priority                                      |
-| 0.72                  | Keep Right                                    |
-| 0.95                  | Roundabout mandatory                          |
-| 0.99                  | wild animals crossing                         |
+| 0.957                   | Roundabout mandatory                          |
+| 0.011                   | Speed Limt 30 kph                             |
+| 0.010                  | Speed Limt 20 kph                             |
+| 0.006                  | Speed Limt 70 kph                          |
+| 0.005                  | End all speed and passing limits              |
 
 Image 5: Children Crossing
 
@@ -226,11 +224,11 @@ Image 5: Children Crossing
 
 | Probability           |     Prediction                                |
 |:---------------------:|:---------------------------------------------:|
-| 1.0                   | Right of way                                  |
-| 1.0                   | Priority                                      |
-| 0.72                  | Keep Right                                    |
-| 0.95                  | Roundabout mandatory                          |
-| 0.99                  | wild animals crossing                         |
+| 0.990                   | wild animals crossing                       |
+| 0.0055                   | Roundabout mandatory                       |
+| 0.0049                  | Speed Limit 120kph                          |
+| 0....                  | Double Curve                                 |
+| 0....                  | Speed Limit 100kph                         |
 
 
 ### Visualizing the Neural Network
