@@ -14,7 +14,7 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-[image1]: ./examples/reportvisualization1.png "class distributions"
+[image1]: ./examples/reportvizualisation1.png "class distributions"
 [image2]: ./examples/preproc1.png "base images"
 [image3]: ./examples/preproc2.png "normalised"
 [image4]: ./examples/preproc3.png "grayscaled"
